@@ -6,13 +6,13 @@ pipeline {
     stages { 
         stage('SCM Checkout') {
             steps{
-            git 'https://github.com/itzshivpandit/jenkinprojectcicd.git'
+            git 'https://github.com/itzshivpandit/newrepo.git'
             }
         }
 
         stage('Build docker image') {
             steps {  
-                sh 'docker build -t shivsharma01/myimage01:$BUILD_NUMBER .'
+                sh 'docker build -t shivsharma01/myimage02:$BUILD_NUMBER .'
             }
         }
         stage('login to dockerhub') {
@@ -22,7 +22,7 @@ pipeline {
         }
         stage('push image') {
             steps{
-                sh 'docker push shivsharma01/myimage1:$BUILD_NUMBER'
+                sh 'docker push shivsharma01/myimage02:$BUILD_NUMBER'
             }
         }
 }
