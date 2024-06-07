@@ -6,7 +6,8 @@ pipeline {
     stages { 
         stage('SCM Checkout') {
             steps{
-            git 'https://github.com/itzshivpandit/newrepo.git'
+            git url: 'https://github.com/itzshivpandit/newrepo.git', branch: 'main'
+
             }
         }
 
