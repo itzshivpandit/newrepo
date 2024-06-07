@@ -15,6 +15,16 @@ pipeline {
                 sh 'docker build -t shivsharma01/myimage02:$BUILD_NUMBER .'
             }
         }
+
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    // Run the Docker container with the specified port mapping
+                    sh 'docker run -d -p 100:80 shivsharma01/myimage02:$BUILD_NUMBER'
+                }
+            }
+        }
+        
         stage('login to dockerhub') {
             steps{
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
