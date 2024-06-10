@@ -9,7 +9,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout the code from version control
-                git 'https://github.com/itzshivpandit/newrepo.git'
+                git branch: 'main', url: 'https://github.com/itzshivpandit/newrepo.git'
             }
         }
 
@@ -17,7 +17,7 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image with the tag
-                    sh 'docker build -t shivsharma01/myimage001:$BUILD_NUMBER .'
+                    sh 'docker build -t shivsharma01/myimage:$BUILD_NUMBER .'
                 }
             }
         }
@@ -26,7 +26,7 @@ pipeline {
             steps {
                 script {
                     // Run the Docker container with the specified port mapping
-                    sh 'docker run -d -p 3215:80 --name mycontainer-$BUILD_NUMBER shivsharma01/myimage001:$BUILD_NUMBER'
+                    sh 'docker run -d -p 3215:80 --name mycontainer-$BUILD_NUMBER shivsharma01/myimage:$BUILD_NUMBER'
                 }
             }
         }
