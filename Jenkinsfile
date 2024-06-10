@@ -9,7 +9,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout the code from version control
-                git 'https://your-repository-url.git'
+                git 'https://github.com/itzshivpandit/newrepo.git'
             }
         }
 
