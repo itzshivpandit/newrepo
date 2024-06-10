@@ -1,19 +1,24 @@
 pipeline {
-    agent any 
-    environment {
-    DOCKERHUB_CREDENTIALS = credentials('shivsharma01')
-    }
-    stages { 
-        stage('SCM Checkout') {
-            steps{
-            git url: 'https://github.com/itzshivpandit/newrepo.git', branch: 'main'
+    agent any
 
+    environment {
+        BUILD_NUMBER = "${env.BUILD_ID}" // Use Jenkins build ID as the Docker image tag
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the code from version control
+                git 'https://your-repository-url.git'
             }
         }
 
-        stage('Build docker image') {
-            steps {  
-                sh 'docker build -t shivsharma01/myimage02:$BUILD_NUMBER .'
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build the Docker image with the tag
+                    sh 'docker build -t shivsharma01/myimage:$BUILD_NUMBER .'
+                }
             }
         }
 
@@ -21,25 +26,18 @@ pipeline {
             steps {
                 script {
                     // Run the Docker container with the specified port mapping
-                    sh 'docker run -d -p 100:80 shivsharma01/myimage02:$BUILD_NUMBER'
+                    sh 'docker run -d -p 3215:80 --name mycontainer-$BUILD_NUMBER shivsharma01/myimage:$BUILD_NUMBER'
                 }
             }
         }
-        
-        stage('login to dockerhub') {
-            steps{
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-            }
-        }
-        stage('push image') {
-            steps{
-                sh 'docker push shivsharma01/myimage02:$BUILD_NUMBER'
-            }
-        }
-}
-post {
+    }
+
+    post {
         always {
-            sh 'docker logout'
+            script {
+                // List all running Docker containers
+                sh 'docker ps -a'
+            }
         }
     }
 }
